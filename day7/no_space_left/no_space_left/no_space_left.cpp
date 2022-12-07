@@ -27,6 +27,9 @@ File getFile(string line);
 Directory* currentDir;
 map<string, Directory> dirs;
 
+//new method of checking the files maybe
+multimap<string, File> files;
+
 int main()
 {
     //just to check the time it is taking to execute my algorithm
@@ -69,31 +72,56 @@ int main()
             Directory d;
             d.name = s;
 
+
             currentDir->subDirs.push_back(d);
+            //if(currentDir->name == "/")
             dirs.insert(pair<string, Directory>(s, d));
         }
         else {
             File f = getFile(line);
 
+            files.insert(pair<string, File>(f.dir->name, f));
             //cout << "The file has: " << f.size << " bytes of memory, and its from the : " << f.dir->name << " directory" << endl;
         }
     }
     //debug
     {
         for (auto const& d : dirs) {
+            if (d.second.name != "/" && d.second.subDirs.size() == 0)continue;
             int value = 0;
             cout << "- " << d.second.name << " (dir)" << endl;
+
+            //subdirs
             for (auto const& subdirs : d.second.subDirs) {
-                cout << subdirs.name << endl;
-            }
-            for (auto const& f : d.second.files) {
                 cout << " ";
-                cout << "- (file, " << f.name << ") " << endl;
+                cout << "- " << subdirs.name << " (dir)" << endl;
+                //checking the files;          
+                for (auto const& f : files) {
+                    if (f.first == subdirs.name) {
+                        cout << "- (file, " << f.second.name << ") " << endl;
+                        value += f.second.size;
+                    }
+                }
+            }
+            //checking the files;          
+            for (auto const& f : files) {
+                if (f.first == d.second.name) {
+                    cout << "- (file, " << f.second.name << ") " << endl;
+                    value += f.second.size;
+                }
+            }
+
+            cout << endl;
+
+
+            /*for (auto const& f : d.second.files) {
+                cout << " ";
+                cout << "- (file, " << f.name << ") " << "dir : " << f.dir->name << endl;
                 value += f.size;
             }
             if (value >= MAX_SIZE) {
                 cout << "- " << d.second.name << " (dir)" << "Has more than " << MAX_SIZE << " Size! So it should be counted" << endl;
-            }
+            }*/
         }
 
         //checking the duration of the operation
