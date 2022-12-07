@@ -8,5 +8,4 @@ using namespace std;
 
 namespace Input {
 	extern ifstream LoadFile(string fileName);
-	extern void test();
 }

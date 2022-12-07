@@ -19,6 +19,7 @@ void supply_debug();
 //lists and what not
 map<string, string> lines;
 vector<Crate> crates;
+vector<vector<int>> instructions;
 
 int main()
 {
@@ -57,8 +58,26 @@ int main()
 
         //we know the line that registers an input has move on the start.
         auto key = line.substr(0, 4);
+        int amount = 0;int fromAmt = 0; int toAmt = 0;
+        vector<int> inst;
         if (key == "move") {
-            
+            auto number = line.substr(5, 2);
+            amount = stoi(number);
+            cout << amount << endl;
+        }
+        auto from = line.find("from");
+        if (from != string::npos) {
+            fromAmt = stoi(line.substr(from + 5, 2));
+        }
+        auto to = line.find("to");
+        if (to != string::npos) {
+            toAmt = stoi(line.substr(to + 3, 2));
+
+            //loading the instructions
+            inst.push_back(amount);
+            inst.push_back(fromAmt);
+            inst.push_back(toAmt);
+            instructions.push_back(inst);
         }
 
         currentLine++;
@@ -85,4 +104,9 @@ void supply_debug()
     for (auto const& crate : crates) {
         cout << crate.crate << " At : " << crate.line << " Index : " << crate.subIndex[0] << " " << crate.subIndex[1] << endl;
     }
+
+    for (auto const& inst : instructions) {
+        cout << "Move : " << inst[0] << " From : " << inst[1] << " To : " << inst[2] << endl;
+    }
 }
+

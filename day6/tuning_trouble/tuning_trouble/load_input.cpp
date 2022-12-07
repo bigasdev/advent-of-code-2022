@@ -14,8 +14,4 @@ namespace Input {
 		}
 		return file;
 	}
-	void test()
-	{
-		cout << "test";
-	}
 }
