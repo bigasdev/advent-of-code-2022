@@ -32,6 +32,9 @@ multimap<string, File> files;
 //count
 multimap<string, int> currentCount;
 
+//count total;
+int totalAmount = 0;
+
 int main()
 {
     //just to check the time it is taking to execute my algorithm
@@ -94,9 +97,10 @@ int main()
     {
         for (auto const& d : dirs) {
             if (d.second.name != "/" && d.second.subDirs.size() == 0)continue;
+            if (d.second.name == "/")continue;
             int value = 0;
+            int diffValue = 0;
             cout << "- " << d.second.name << " (dir)" << endl;
-            if(d.second.fatherDir)cout << " just for debug : " << d.second.fatherDir->name << endl;
 
             //subdirs
             for (auto const& subdirs : d.second.subDirs) {
@@ -108,13 +112,16 @@ int main()
                     if (f.first == subdirs.name) {
                         cout << "- (file, " << f.second.name << ") " << endl;
                         internalValue += f.second.size;
-                        value += internalValue;
                     }
                 }
+                value += internalValue;
                 cout << " ";
                 cout << "Size of the current folder : " << internalValue << endl;
-                if (internalValue >= MAX_SIZE) {
-
+                if (internalValue <= MAX_SIZE) {
+                    cout << " ";
+                    cout << "This folder is less than the max amount !! " << endl;
+                    diffValue += internalValue;
+                    totalAmount += internalValue;
                 }
             }
             //checking the files;          
@@ -126,8 +133,19 @@ int main()
                 }
             }
 
+            cout << "This directory has : " << value << " Size!  " << endl;
+            currentCount.insert(pair<string, int>(d.second.name, value));
             cout << endl;
 
+            if (d.second.fatherDir) {
+                for (auto const& v : currentCount) {
+                    if (v.first == d.second.fatherDir->name && v.first != d.second.name) {
+                        auto itr = currentCount.find(d.second.fatherDir->name);
+                        if (itr != currentCount.end())
+                            itr->second = v.second + diffValue;
+                    }
+                }
+            }
 
             /*for (auto const& f : d.second.files) {
                 cout << " ";
@@ -138,6 +156,16 @@ int main()
                 cout << "- " << d.second.name << " (dir)" << "Has more than " << MAX_SIZE << " Size! So it should be counted" << endl;
             }*/
         }
+
+        //checking the real values
+        for (auto const& v : currentCount) {
+            cout << v.first << " Has : " << v.second << " kb as size!" << endl;
+            if (v.second <= MAX_SIZE) {
+                totalAmount += v.second;
+            }
+        }
+
+        cout << "Total sum of the directories with less than " << MAX_SIZE << " " << totalAmount << endl;
 
         //checking the duration of the operation
         auto t2 = high_resolution_clock::now();
