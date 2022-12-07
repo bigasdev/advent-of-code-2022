@@ -9,6 +9,7 @@ struct File;
 
 struct Directory {
 public:
+	Directory* fatherDir;
 	string name;
 	vector<File> files;
 	vector<Directory> subDirs;

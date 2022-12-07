@@ -58,7 +58,11 @@ int main()
             if (name == "..")continue;
 
             auto d = dirs.find(name);
-            currentDir = &d->second;
+            auto dir = &d->second;
+            if (currentDir) {
+                cout << currentDir << endl;
+            }
+            currentDir = dir;
             continue;
             break;
         }
@@ -90,6 +94,7 @@ int main()
             if (d.second.name != "/" && d.second.subDirs.size() == 0)continue;
             int value = 0;
             cout << "- " << d.second.name << " (dir)" << endl;
+            cout << " just for debug : " << d.second.fatherDir->name << endl;
 
             //subdirs
             for (auto const& subdirs : d.second.subDirs) {
