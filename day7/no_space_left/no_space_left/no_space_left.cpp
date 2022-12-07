@@ -29,6 +29,8 @@ map<string, Directory> dirs;
 
 //new method of checking the files maybe
 multimap<string, File> files;
+//count
+multimap<string, int> currentCount;
 
 int main()
 {
@@ -43,6 +45,7 @@ int main()
     Directory dir;
     dir.name = "/";
     dirs.insert(pair<string,Directory>("/", dir));
+    currentDir = &dir;
 
     string line;
     auto file = Input::LoadFile("input.txt");
@@ -59,10 +62,9 @@ int main()
 
             auto d = dirs.find(name);
             auto dir = &d->second;
-            if (currentDir) {
-                cout << currentDir << endl;
-            }
+            auto lastDir = currentDir;
             currentDir = dir;
+            currentDir->fatherDir = lastDir;
             continue;
             break;
         }
@@ -94,23 +96,31 @@ int main()
             if (d.second.name != "/" && d.second.subDirs.size() == 0)continue;
             int value = 0;
             cout << "- " << d.second.name << " (dir)" << endl;
-            cout << " just for debug : " << d.second.fatherDir->name << endl;
+            if(d.second.fatherDir)cout << " just for debug : " << d.second.fatherDir->name << endl;
 
             //subdirs
             for (auto const& subdirs : d.second.subDirs) {
                 cout << " ";
                 cout << "- " << subdirs.name << " (dir)" << endl;
+                int internalValue = 0;
                 //checking the files;          
                 for (auto const& f : files) {
                     if (f.first == subdirs.name) {
                         cout << "- (file, " << f.second.name << ") " << endl;
-                        value += f.second.size;
+                        internalValue += f.second.size;
+                        value += internalValue;
                     }
+                }
+                cout << " ";
+                cout << "Size of the current folder : " << internalValue << endl;
+                if (internalValue >= MAX_SIZE) {
+
                 }
             }
             //checking the files;          
             for (auto const& f : files) {
                 if (f.first == d.second.name) {
+                    cout << " ";
                     cout << "- (file, " << f.second.name << ") " << endl;
                     value += f.second.size;
                 }
