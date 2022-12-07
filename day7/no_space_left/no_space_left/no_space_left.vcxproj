@@ -131,6 +131,9 @@
     <ClCompile Include="..\..\..\day4\supply_stacks\supply_stacks\load_input.cpp" />
     <ClCompile Include="no_space_left.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="inputs.hpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
