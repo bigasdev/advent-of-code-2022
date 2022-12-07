@@ -69,6 +69,7 @@ int main()
             Directory d;
             d.name = s;
 
+            currentDir->subDirs.push_back(d);
             dirs.insert(pair<string, Directory>(s, d));
         }
         else {
@@ -82,6 +83,9 @@ int main()
         for (auto const& d : dirs) {
             int value = 0;
             cout << "- " << d.second.name << " (dir)" << endl;
+            for (auto const& subdirs : d.second.subDirs) {
+                cout << subdirs.name << endl;
+            }
             for (auto const& f : d.second.files) {
                 cout << " ";
                 cout << "- (file, " << f.name << ") " << endl;
