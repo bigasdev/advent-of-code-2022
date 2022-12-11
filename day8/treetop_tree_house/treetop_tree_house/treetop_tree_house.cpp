@@ -41,6 +41,7 @@ int main()
         for (int j = 0; j < 99; j++)
         {
             grid_2d[i][j] = (line[j] - '0');
+            cout << grid_2d[i][j] << endl;
         }
     }
 
@@ -82,9 +83,9 @@ int main()
 
         turbo_break:;
         }
-    }*/
+    }
 
-    //cout << score << endl;
+    cout << score << endl;*/
 
     while (getline(file, line)) {
         //we count the lines and add it to the array of strings
@@ -102,7 +103,7 @@ int main()
 
 void generateMap(string map[], int count)
 {
-    int treeAmount = 16;
+    int treeAmount = 0;
 
     for (size_t i = 0; i < count; i++)
     {
@@ -113,13 +114,13 @@ void generateMap(string map[], int count)
                 cout << " Top of the grid ! " << endl;
                 for (size_t i = 0; i < map[i].length(); i++)
                 {
-                    //treeAmount++;
+                    treeAmount++;
                 }
             }else if (i == count-1) {
                 cout << " Bottom of the grid ! " << endl;
                 for (size_t i = 0; i < map[i].length(); i++)
                 {
-                    //treeAmount++;
+                    treeAmount++;
                 }
             }
             //normal loop, this is where we'll check the normal trees
@@ -131,7 +132,7 @@ void generateMap(string map[], int count)
                     Tree tree{};
                     //we are not using the first and last elements because they are on the edge
                     if (j != 0 && j != map[i].length() - 1) {
-                        tree.middle = map[i][j] - 48;
+                        tree.middle = map[i][j] - '0';
                         cout << "Element : " << tree.middle << endl;
 
                         //here we have the base of the element, we need to check if there are trees in the side
@@ -142,18 +143,17 @@ void generateMap(string map[], int count)
 
                         //checks to make sure they can execute
                         if (right <= map[i].length() - 1) {
-                            tree.right = (int)map[i][right] - 48;
+                            tree.right = (int)map[i][right] - '0';
                         }
                         if (left >= 0) {
-                            tree.left = (int)map[i][left] - 48;
+                            tree.left = (int)map[i][left] - '0';
                         }
                         if (up >= 0) {
-                            tree.up = (int)map[up][j] - 48;
+                            tree.up = (int)map[up][j] - '0';
                         }
                         if (down <= count-1) {
-                            tree.down = (int)map[down][j] - 48;
+                            tree.down = (int)map[down][j] - '0';
                         }
-                        cout << " just to see " << endl;
                         trees.push_back(tree);
                     }
                 }
@@ -166,15 +166,13 @@ void generateMap(string map[], int count)
         cout << t.left << " " << t.middle << " " << t.right << endl;
         cout << " " << t.down << " " << endl;
 
-        if (t.middle > t.up && (t.middle > t.right || t.middle > t.left)) {
-            cout << " its visible on up ! " << endl;
-            treeAmount++;
-            continue;
-        }
-        if (t.middle > t.down && (t.middle > t.right || t.middle > t.left)) {
-            cout << " its visible on down ! " << endl;
-            treeAmount++;
-            continue;
+        if (t.middle > t.up) {
+            if (t.middle > t.right && t.middle > t.left && t.middle > t.down) {
+                cout << " its visible on up ! " << endl;
+                treeAmount++;
+                cout << treeAmount << endl;
+                continue;
+            }
         }
     }
     cout << "Amount of trees : " << treeAmount << endl;
